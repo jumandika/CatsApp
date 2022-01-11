@@ -1,0 +1,6 @@
+module Pods_CatsApp_CatsAppTests {
+  umbrella header "Pods-CatsApp-CatsAppTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
