@@ -48,6 +48,7 @@ const CatsList = ({
         if (index == indexSelected) {
             setIsCollapse(!isCollapse)
         } else {
+            setIsCollapse(true)
             setIndexSelected(index)
         }
 
@@ -166,70 +167,75 @@ const CatsList = ({
                                 colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,0.8)']}
                                 style={styles.linearGradientStyle}
                             />
-                            <Text style={[styles.nameStyle, { paddingLeft: 20, }]}>{item.name}</Text>
-                            {item.alt_names !== '' &&
-                                <Text style={[styles.subNameStyle, { paddingLeft: 20, fontFamily: fonts.type.poppinsThin, top: -8 }]}>{item?.alt_names}</Text>
-                            }
+                            <View style={[styles.rowStyle, { paddingLeft: 20, }]}>
+                                <View style={{ flex: 1 }}>
+                                    <Text style={[styles.nameStyle, {}]}>{item.name}</Text>
+                                    {item.alt_names !== '' &&
+                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsThin, top: -8 }]}>{item?.alt_names}</Text>
+                                    }
+                                </View>
+                                <Text style={[styles.nameStyle, { flex: 1, textAlign: 'right', fontSize: fonts.size.font14, flex: 1, paddingRight: 20, }]}>{index + 1}/{catList.length}</Text>
+                            </View>
                             <View style={[styles.rowStyle, { paddingLeft: 20, }]}>
                                 <Image source={{ uri: urlFlag }} style={{ marginRight: 5, height: 8, width: 15 }} />
                                 <Text style={styles.subNameStyle}>{item.origin}</Text>
                             </View>
                             <MaterialCommunityIcons name={isCollapse && indexSelected == index ? 'arrow-collapse-up' : 'arrow-collapse-down'} style={{ alignSelf: 'center', marginBottom: 20, fontSize: fonts.size.font24, color: colors.white }} />
-                            {
-                                isCollapse && indexSelected == index &&
-                                <View key={item.id} style={{ paddingHorizontal: 20, backgroundColor: '#FFF' }} >
-                                    <View style={[styles.descContainer, { alignItems: 'center', }]}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Adaptability  '}</Text>
-                                        {rating(item.adaptability)}
-                                    </View>
-                                    <View style={[styles.descContainer, { alignItems: 'center', }]}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Child Friendly  '}</Text>
-                                        {rating(item.child_friendly)}
-                                    </View>
-                                    <View style={[styles.descContainer, { alignItems: 'center', }]}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Dog Friendly  '}</Text>
-                                        {rating(item.dog_friendly)}
-                                    </View>
-                                    <View style={[styles.descContainer, { alignItems: 'center', }]}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Grooming  '}</Text>
-                                        {rating(item.grooming)}
-                                    </View>
-                                    <View style={[styles.descContainer, { alignItems: 'center', }]}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Energy Level  '}</Text>
-                                        {rating(item.energy_level)}
-                                    </View>
-                                    <View style={[styles.descContainer, { alignItems: 'center', }]}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Social Needs  '}</Text>
-                                        {rating(item.social_needs)}
-                                    </View>
-                                    <View style={styles.descContainer}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Description  '}</Text>
-                                        <Text style={[styles.subNameStyle, { flex: 1, textAlign: 'justify', color: '#000000' }]}>{item.description}</Text>
-                                    </View>
-                                    <View style={styles.descContainer}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Life Span  '}</Text>
-                                        <Text style={[styles.subNameStyle, { color: '#000000' }]}>{item.life_span} Years</Text>
-                                    </View>
-                                    <View style={styles.descContainer}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Temperament  '}</Text>
-                                        <Text style={[styles.subNameStyle, { flex: 1, textAlign: 'right', color: '#000000' }]}>{item.temperament}</Text>
-                                    </View>
-                                    <View style={styles.descContainer}>
-                                        <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Weight  '}</Text>
-                                        <View>
-                                            <View style={{ flexDirection: 'row', }}>
-                                                <Text style={[styles.subNameStyle, { color: colors.grey }]}>{'      Imperial  '}</Text>
-                                                <Text style={[styles.subNameStyle, { color: '#000000' }]}>{item.weight.imperial} Kg</Text>
-                                            </View>
-                                            <View style={{ flexDirection: 'row', }}>
-                                                <Text style={[styles.subNameStyle, { color: colors.grey }]}>{'      Metric  '}</Text>
-                                                <Text style={[styles.subNameStyle, { color: '#000000' }]}>{item.weight.metric} Kg</Text>
-                                            </View>
+                        </ImageBackground>
+                        {
+                            isCollapse && indexSelected == index &&
+                            <View key={item.id} style={{ height: 'auto', paddingHorizontal: 20, backgroundColor: '#FFF' }} >
+                                <View style={[styles.descContainer, { alignItems: 'center', }]}>
+                                    <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Adaptability  '}</Text>
+                                    {rating(item.adaptability)}
+                                </View>
+                                <View style={[styles.descContainer, { alignItems: 'center', }]}>
+                                    <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Child Friendly  '}</Text>
+                                    {rating(item.child_friendly)}
+                                </View>
+                                <View style={[styles.descContainer, { alignItems: 'center', }]}>
+                                    <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Dog Friendly  '}</Text>
+                                    {rating(item.dog_friendly)}
+                                </View>
+                                <View style={[styles.descContainer, { alignItems: 'center', }]}>
+                                    <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Grooming  '}</Text>
+                                    {rating(item.grooming)}
+                                </View>
+                                <View style={[styles.descContainer, { alignItems: 'center', }]}>
+                                    <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Energy Level  '}</Text>
+                                    {rating(item.energy_level)}
+                                </View>
+                                <View style={[styles.descContainer, { alignItems: 'center', }]}>
+                                    <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Social Needs  '}</Text>
+                                    {rating(item.social_needs)}
+                                </View>
+                                <Text style={[styles.subNameStyle, {paddingTop:10, fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Description  '}</Text>
+                                <View style={styles.descContainer}>
+                                    <Text style={[styles.subNameStyle, { flex: 1, textAlign: 'justify', color: '#000000' }]}>{item.description}</Text>
+                                </View>
+                                <View style={styles.descContainer}>
+                                    <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Life Span  '}</Text>
+                                    <Text style={[styles.subNameStyle, { color: '#000000' }]}>{item.life_span} Years</Text>
+                                </View>
+                                <View style={styles.descContainer}>
+                                    <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Temperament  '}</Text>
+                                    <Text style={[styles.subNameStyle, { flex: 1, textAlign: 'right', color: '#000000' }]}>{item.temperament}</Text>
+                                </View>
+                                <View style={styles.descContainer}>
+                                    <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Weight  '}</Text>
+                                    <View>
+                                        <View style={{ flexDirection: 'row', }}>
+                                            <Text style={[styles.subNameStyle, { color: colors.grey }]}>{'      Imperial  '}</Text>
+                                            <Text style={[styles.subNameStyle, { color: '#000000' }]}>{item.weight.imperial} Kg</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', }}>
+                                            <Text style={[styles.subNameStyle, { color: colors.grey }]}>{'      Metric  '}</Text>
+                                            <Text style={[styles.subNameStyle, { color: '#000000' }]}>{item.weight.metric} Kg</Text>
                                         </View>
                                     </View>
                                 </View>
-                            }
-                        </ImageBackground>
+                            </View>
+                        }
 
                     </View>
 
@@ -291,7 +297,7 @@ const CatsList = ({
                     onScroll={onScroll}
                     // contentContainerStyle={{ paddingTop:20 }}
                     removeClippedSubviews={true}
-                    scrollEventThrottle={0.0}
+                    scrollEventThrottle={0.00}
                     windowSize={1}
                     initialNumToRender={10}
                     maxToRenderPerBatch={10}
@@ -320,6 +326,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         width: metrics.screenWidth,
         height: metrics.screenHeight + STATUSBAR_HEIGHT,
+        // flex: 1,
         // marginTop: 10,
         // borderRadius: 12,
         // elevation: 20,
@@ -359,10 +366,10 @@ const styles = StyleSheet.create({
         height: '70%',
     },
     imageBackgroundStyle: {
+        flex: 1,
         width: metrics.screenWidth,
-        height: metrics.screenHeight + STATUSBAR_HEIGHT,
-        // height: metrics.screenHeight,
-        width: 'auto',
+        // height: metrics.screenHeight + STATUSBAR_HEIGHT,
+        height: 'auto',
         justifyContent: 'flex-end',
     },
     descContainer: {

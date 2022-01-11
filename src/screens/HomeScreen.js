@@ -33,7 +33,7 @@ class HomeScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar barStyle={'dark-content'} backgroundColor={'rgba(255,255,255,.6)'} />
+                <StatusBar barStyle={'dark-content'} backgroundColor={'rgba(255,255,255,.3)'} />
 
 
                 <CatsList
@@ -51,7 +51,7 @@ class HomeScreen extends Component {
                     />
                     {this.state.textSearch.length < 3 && this.state.textSearch.length != 0 &&
                         <Text style={styles.titleStyle}>
-                            *minimal 3 karakter
+                            *minimum 3 characters
                     </Text>
                     }
                 </View >
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         height: 40,
         width: metrics.screenWidth,
         color: '#000',
-        backgroundColor: 'rgba(255,255,255,0.6)',
+        backgroundColor: 'rgba(255,255,255,0.3)',
         fontFamily: fonts.type.poppinsRegular,
         paddingHorizontal: 20,
     }
