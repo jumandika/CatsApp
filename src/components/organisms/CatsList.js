@@ -25,7 +25,7 @@ import metrics from '../../theme/metrics';
 
 import { NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT+1.5;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT + 1.5;
 
 const CatsList = ({
     textSearch,
@@ -359,7 +359,6 @@ const styles = StyleSheet.create({
         height: '70%',
     },
     imageBackgroundStyle: {
-        resizeMode: 'contain',
         width: metrics.screenWidth,
         height: metrics.screenHeight + STATUSBAR_HEIGHT,
         // height: metrics.screenHeight,

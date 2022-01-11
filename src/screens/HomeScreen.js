@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     titleStyle: {
+        paddingLeft: 20,
         fontFamily: fonts.type.poppinsLight,
         fontSize: fonts.size.font10,
         color: 'red',
