@@ -34,8 +34,6 @@ class HomeScreen extends Component {
         return (
             <View style={styles.container}>
                 <StatusBar barStyle={'dark-content'} backgroundColor={'rgba(255,255,255,.3)'} />
-
-
                 <CatsList
                     textSearch={this.state.textSearch}
                     navigation={this.props.navigation}
