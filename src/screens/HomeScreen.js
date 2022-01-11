@@ -73,10 +73,7 @@ const styles = StyleSheet.create({
     headerContainer: {
         position: 'absolute',
         top: 0,
-        // padding: 10,
-        // paddingBottom: 10,
         paddingTop: 32,
-        // elevation: 10,
         borderBottomWidth: 1,
         borderColor: '#CCC',
     },
@@ -86,12 +83,9 @@ const styles = StyleSheet.create({
     textInputStyle: {
         height: 40,
         width: metrics.screenWidth,
-        // borderColor: '#CCC',
-        // borderWidth: 1,
         color: '#000',
         backgroundColor: 'rgba(255,255,255,0.6)',
         fontFamily: fonts.type.poppinsRegular,
-        // borderRadius: 10,
         paddingHorizontal: 20,
     }
 

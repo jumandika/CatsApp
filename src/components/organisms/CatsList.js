@@ -281,6 +281,7 @@ const CatsList = ({
                     refreshing={isRefreshing}
                     bounces={false}
                     decelerationRate='fast'
+                    pagingEnabled={true}
                     keyExtractor={(item, index) => { return item.id }}
                     data={catList}
                     renderItem={(item, index) => renderItem(item, index)}
@@ -290,9 +291,9 @@ const CatsList = ({
                     onScroll={onScroll}
                     // contentContainerStyle={{ paddingTop:20 }}
                     removeClippedSubviews={true}
-                    scrollEventThrottle={16}
+                    scrollEventThrottle={0.0}
                     windowSize={1}
-                    initialNumToRender={2}
+                    initialNumToRender={10}
                     maxToRenderPerBatch={10}
                     ListFooterComponent={ListFooterComponent}
                 />
