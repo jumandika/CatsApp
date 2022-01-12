@@ -25,7 +25,7 @@ import metrics from '../../theme/metrics';
 
 import { NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT + 1.5;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT;
 
 const CatsList = ({
     textSearch,
@@ -209,7 +209,7 @@ const CatsList = ({
                                     <Text style={[styles.subNameStyle, { fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Social Needs  '}</Text>
                                     {rating(item.social_needs)}
                                 </View>
-                                <Text style={[styles.subNameStyle, {paddingTop:10, fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Description  '}</Text>
+                                <Text style={[styles.subNameStyle, { paddingTop: 10, fontFamily: fonts.type.poppinsLight, color: colors.darkGrey }]}>{'Description  '}</Text>
                                 <View style={styles.descContainer}>
                                     <Text style={[styles.subNameStyle, { flex: 1, textAlign: 'justify', color: '#000000' }]}>{item.description}</Text>
                                 </View>
@@ -298,7 +298,7 @@ const CatsList = ({
                     // contentContainerStyle={{ paddingTop:20 }}
                     removeClippedSubviews={true}
                     scrollEventThrottle={0.00}
-                    windowSize={1}
+                    windowSize={5}
                     initialNumToRender={10}
                     maxToRenderPerBatch={10}
                     ListFooterComponent={ListFooterComponent}
@@ -326,11 +326,12 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         width: metrics.screenWidth,
         height: metrics.screenHeight + STATUSBAR_HEIGHT,
+        // borderBottomWidth: 2,
+        borderTopWidth: 3,
         // flex: 1,
-        // marginTop: 10,
+        // marginTop: 1,
         // borderRadius: 12,
         // elevation: 20,
-        // borderWidth: 0.8,
         // borderColor: '#EEE',
         // backgroundColor: '#FFF',
 
