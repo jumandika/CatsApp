@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ApiService from '../../config/ApiService';
 import {
@@ -9,10 +9,12 @@ import {
     ImageBackground,
     Dimensions,
     Animated,
+    Easing,
     Pressable,
     Platform,
     FlatList,
     ActivityIndicator,
+
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -27,10 +29,13 @@ import { NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT;
 
+
 const CatsList = ({
     textSearch,
     navigation,
 }) => {
+
+    const flatlistRef = useRef(null)
 
     const [pages, setPages] = useState(1)
     const [limit, setLimit] = useState(10)
@@ -42,10 +47,17 @@ const CatsList = ({
     const [isCollapse, setIsCollapse] = useState(false)
     const [indexSelected, setIndexSelected] = useState(null)
     const [hasScrolled, setHasScrolled] = useState(false)
+    const [indexDisplayed, setIndexDisplayed] = useState(null)
+    const [progressStatus, setProgressStatus] = useState(0)
+
+
+    let timer;
 
     const collapse = (item, index) => {
         // console.log('COLLAPSE')
+        clearTimeout(timer)
         if (index == indexSelected) {
+            setIndexDisplayed(indexDisplayed + 1)
             setIsCollapse(!isCollapse)
         } else {
             setIsCollapse(true)
@@ -58,6 +70,20 @@ const CatsList = ({
         getCatList(pages, limit)
 
     }, [])
+
+
+    useEffect(() => {
+        onStart(5000);
+        timer = setTimeout(() => {
+            if (indexDisplayed > 0 && indexDisplayed < catList.length) {
+                flatlistRef.current.scrollToIndex({ animated: true, index: indexDisplayed })
+                // setIndexDisplayed(indexDisplayed + 1)
+            }
+        }, 5000)
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [indexDisplayed])
 
     useEffect(() => {
         if (textSearch.length >= 3) {
@@ -75,6 +101,21 @@ const CatsList = ({
         }
     }, [textSearch])
 
+    anim = new Animated.Value(0);
+    _progressValue = new Animated.Value(0);
+
+    const onStart = (duration) => {
+        anim = Animated.timing(_progressValue, {
+            duration: duration,
+            toValue: metrics.screenWidth,
+            easing: Easing.linear,
+            useNativeDriver: true,
+        }).start();
+    };
+    const onPause = () => {
+        if (_progressValue != null) _progressValue?.stop();
+    };
+
     const getCatList = async (pages, limit) => {
         try {
             const request = await fetch(ApiService.Endpoint.urlApi + '?attach_breed=1&page=' + pages + '&limit=' + limit,
@@ -87,8 +128,11 @@ const CatsList = ({
             // console.log('pages', pages, response)
             if (response.length > 0) {
                 setCatList([...catList, ...response])
+                setIndexDisplayed(indexDisplayed + 1)
+                onStart(5000);
                 setIsLoading(false)
                 setIsRefreshing(false)
+
             } else {
                 // setCatList([])
                 setIsRefreshing(false)
@@ -277,34 +321,50 @@ const CatsList = ({
 
     }
 
+    const onViewRef = useRef((viewableItems) => {
+        // console.log(viewableItems)
+        setIndexDisplayed(viewableItems.changed[0].index + 1)
+        // Use viewable items in state or as intended
+    })
+    const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 50 })
+
     return (
         <View style={styles.container}>
+
             { isLoading ?
                 <ActivityIndicator style={{ flex: 0.5 }} size={'large'} color={colors.darkGrey} />
                 :
-                <FlatList
-                    onRefresh={onRefresh}
-                    refreshing={isRefreshing}
-                    bounces={false}
-                    decelerationRate='fast'
-                    pagingEnabled={true}
-                    keyExtractor={(item, index) => { return item.id }}
-                    data={catList}
-                    renderItem={(item, index) => renderItem(item, index)}
-                    onEndReached={handleLoadMore}
-                    snapToInterval={metrics.screenHeight + STATUSBAR_HEIGHT}
-                    onEndThreshold={0}
-                    onScroll={onScroll}
-                    // contentContainerStyle={{ paddingTop:20 }}
-                    removeClippedSubviews={true}
-                    scrollEventThrottle={0.00}
-                    windowSize={5}
-                    initialNumToRender={10}
-                    maxToRenderPerBatch={10}
-                    ListFooterComponent={ListFooterComponent}
-                />
-            }
+                <View>
 
+                    <FlatList
+                        onRefresh={onRefresh}
+                        refreshing={isRefreshing}
+                        bounces={false}
+                        ref={flatlistRef}
+                        decelerationRate='fast'
+                        pagingEnabled={true}
+                        keyExtractor={(item, index) => { return item.id }}
+                        data={catList}
+                        renderItem={(item, index) => renderItem(item, index)}
+                        onEndReached={handleLoadMore}
+                        snapToInterval={metrics.screenHeight + STATUSBAR_HEIGHT}
+                        onEndThreshold={0}
+                        onScroll={onScroll}
+                        // contentContainerStyle={{ paddingTop:20 }}
+                        onViewableItemsChanged={onViewRef.current}
+                        viewabilityConfig={viewConfigRef.current}
+                        removeClippedSubviews={true}
+                        scrollEventThrottle={0.00}
+                        windowSize={5}
+                        initialNumToRender={10}
+                        maxToRenderPerBatch={10}
+                        ListFooterComponent={ListFooterComponent}
+                    />
+                    <Animated.View style={{ position: 'absolute', bottom: 0, width: metrics.screenWidth, height: 3, backgroundColor: 'rgba(255,255,255,0.8)', }} />
+                    <Animated.View style={{ position: 'absolute', bottom: 0, width: metrics.screenWidth, height: 3, backgroundColor: 'rgba(0,0,0,0.4)', transform: [{ translateX: _progressValue }] }} />
+
+                </View>
+            }
 
         </View>
     );
@@ -386,8 +446,13 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'center',
         color: 'rgba(0,0,0,0.25)',
-    }
-
+    },
+    inner: {
+        width: "100%",
+        height: 20,
+        borderRadius: 15,
+        backgroundColor: colors.green,
+    },
 
 });
 
